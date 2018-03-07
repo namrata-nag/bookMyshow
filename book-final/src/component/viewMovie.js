@@ -2,16 +2,18 @@ import React,{Component} from 'react';
 import RegisterForm from './register';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import isBlob from '../../node_modules/react-image-file/src/isBlob';
 import {Link} from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Table,TableBody,TableHeader,TableHeaderColumn,TableRow,TableRowColumn} from 'material-ui/Table';
-import FloatingActionButton from 'material-ui/RaisedButton'
-class Viewbooks extends Component{
+import FloatingActionButton from 'material-ui/RaisedButton';
+
+class ViewMovies extends Component{
   //constructor is called-----------------------------------------------------------------------------------
   constructor(){
                 super();
                 this.state={
-                               books:[],
+                               movies:[],
                                count:0,
                                
                            }
@@ -33,9 +35,9 @@ class Viewbooks extends Component{
   }
   //This function is called to get data from the server ----------------------------------------------------
   getData(){
-                axios.get('data/getBook').then(res=>{
+                axios.get('movieApi/getMovie').then(res=>{
                 console.log(" component will mount ...." + res.data);  
-                this.setState({books:res.data});   
+                this.setState({movies:res.data});   
              })
                .catch(function(err){
                 console.log("error occured ....." + err)
@@ -44,16 +46,19 @@ class Viewbooks extends Component{
 //This function is called to create table from data recieved from the server --------------------------------- 
  bookList(){
  
-                return this.state.books.map((b,l)=>{
+                return this.state.movies.map((b,l)=>{
                           console.log("hello there ....and freaking awesome");
-                          return (<TableRow><TableRowColumn>{b.title}</TableRowColumn>
-                                  <TableRowColumn>{b.author}</TableRowColumn>
-                                  <TableRowColumn>{b.genre}</TableRowColumn>
-                                  <TableRowColumn>{b.price}</TableRowColumn>
-                                  <TableRowColumn>edit</TableRowColumn>
+                          return (<TableRow><TableRowColumn>{b. name}</TableRowColumn>
+                                   <TableRowColumn><img src={b.img} /></TableRowColumn>
                                   <TableRowColumn><Link to={"/detail/"+b._id}>BUY</Link></TableRowColumn>
                                   </TableRow>);
                  });
+ }
+ theater(thtr){
+   console.log("inside the theater" + thtr.length );
+   return thtr.map((b,l)=>{
+     console.log("names of theater....")
+     return <h4>{b.theater}</h4>})
  }
 //This function is called when admin is logged in ----------------------------------------------------------
  addButton(){
@@ -85,11 +90,8 @@ class Viewbooks extends Component{
                              <Table>
                                <TableHeader>
                                  <TableRow>
-                                    <TableHeaderColumn>BOOK NAME</TableHeaderColumn>
-                                    <TableHeaderColumn>AUTHOR</TableHeaderColumn>
-                                    <TableHeaderColumn>GENRE</TableHeaderColumn>
-                                    <TableHeaderColumn>PRICE</TableHeaderColumn>
-                                    <TableHeaderColumn></TableHeaderColumn>
+                                    <TableHeaderColumn>MOVIE NAME</TableHeaderColumn>
+                                    <TableHeaderColumn>image</TableHeaderColumn>
                                     <TableHeaderColumn>{this.user()}</TableHeaderColumn>
                                  </TableRow>
                                </TableHeader>
@@ -112,4 +114,4 @@ function mapStateToProps(state){
                        
                   }
 }
-export default connect(mapStateToProps)(Viewbooks);
+export default connect(mapStateToProps)(ViewMovies);

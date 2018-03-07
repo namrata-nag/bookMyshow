@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
- //var User = require('../user');
-var Admin = require('../admin');
+ var User = require('../user');
+// var Admin = require('../admin');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -10,29 +10,30 @@ router.post('/posts', function(req, res) {
     res.json(req.body);
 });
 passport.use(new LocalStrategy( 
-    function(username, password, done) {
+    function(username, password,done) {
       console.log("inside user directory")
-      //  User.getUserByUsername(username,function(err,user){
+       User.getUserByUsername(username,function(err,user){
+             if(err){console.log("error"); }
+             if(!user){ return done(null,false,{message : 'Unknown user'});}
+             User.comparePassword(password,user.password,(err,isMatch)=>{
+                   if(err){console.log("error");}
+                   if(isMatch){ console.log("such user is there!!!");
+                      return done(null,user);} 
+                   else {return done(null,false,{message : 'INVALID PASSWORD'})}
+
+             })
+       });
+
+      //  Admin.getAdminByAdminname(username,function(err,Admin){
       //        if(err){console.log("error"); }
-      //        if(!user){ return done(null,false,{message : 'Unknown user'});}
-      //        User.comparePassword(password,user.password,(err,isMatch)=>{
+      //        if(!Admin){ return done(null,false,{message : 'Unknown Admin'});}
+      //        Admin.comparePassword(password,Admin.password,(err,isMatch)=>{
       //              if(err){console.log("error");}
-      //              if(isMatch){ console.log("such user is there!!!");
-      //                 return done(null,user);} 
+      //              if(isMatch){ console.log("such Admin is there!!!");
+      //                 return done(null,Admin);} 
       //              else {return done(null,false,{message : 'INVALID PASSWORD'})}
       //        })
       //  });
-
-       Admin.getAdminByAdminname(username,function(err,Admin){
-             if(err){console.log("error"); }
-             if(!Admin){ return done(null,false,{message : 'Unknown Admin'});}
-             Admin.comparePassword(password,Admin.password,(err,isMatch)=>{
-                   if(err){console.log("error");}
-                   if(isMatch){ console.log("such Admin is there!!!");
-                      return done(null,Admin);} 
-                   else {return done(null,false,{message : 'INVALID PASSWORD'})}
-             })
-       });
   }
 ));
 
@@ -49,10 +50,13 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
- 
+  passport.authenticate('local'), 
   function(req, res) {
-    console.log("i am user........!!!");
-res.json(true)
+    console.log("i am user........!!!" + typeof(req.user.role)+"i am user........!!!" + typeof(req.body.role));
+    if((req.body.role).toString()=== (req.user.role).toString()){res.json(req.user)}
+    else{console.log("error ocurred")
+  res.json(false)};
+     
   });
 router.post('/register', function(req, res) {
      var name =req.body.name;
@@ -60,6 +64,7 @@ router.post('/register', function(req, res) {
      var username = req.body.username;
      var password1= req.body.password1;
      var password2 = req.body.password2;
+     var role=req.body.role;
 
      console.log( req.body.name +" "+
       req.body.email + "  "
@@ -77,7 +82,8 @@ router.post('/register', function(req, res) {
         name:name,
         email:email,
         username:username,
-        password : password1
+        password : password1,
+        role:role
      })
      User.createuser(newUser,function(err,user){
        if(err){console.log("error occured")}

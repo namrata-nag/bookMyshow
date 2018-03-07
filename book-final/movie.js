@@ -17,7 +17,10 @@ var userSchema=mongoose.Schema({
          theater:String,
          time:[],
          screen:Number
-    }]
+    }],
+    img: {
+        type: String
+    }
     
 });
 

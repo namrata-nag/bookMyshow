@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var Movies = require('../movie');
-// router.get('/getBook',function(req,res){
-//   Books.find(function(err,books){
-//     console.log("reponse is...." + books);
-//         res.json(books);
-//   })
-// })
+router.get('/getMovie',function(req,res){
+  Movies.find(function(err,movie){
+    console.log("reponse is...." + movie);
+        res.json(movie);
+  })
+})
 
 router.post('/addMovie', function(req, res) {
  console.log("body" + req.body.time);
@@ -15,6 +16,8 @@ router.post('/addMovie', function(req, res) {
  var price=parseInt(req.body.price);
 var time=(req.body.time).split(",");
 var screen =parseInt(req.body.screen);
+var data=req.body.imgPath;
+var imgName=req.body.name;
 
 console.log("every thing is done.......")
 
@@ -26,6 +29,7 @@ console.log("every thing is done.......")
             time:time,
             screen:screen
         }],
+        img:data
     
      })
 

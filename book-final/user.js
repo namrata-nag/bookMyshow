@@ -17,6 +17,10 @@ var userSchema=mongoose.Schema({
         type:String},
     name:{
         type: String
+    },
+    role:{
+        type: String
+           
     }
     
 });
@@ -41,6 +45,12 @@ module.exports.comparePassword = function(candidatePassword , hash ,callback){
      callback(null,isMatch);
 });
 }
+//////////////////////////////////////////////////////////////////////////////////////
+// module.exports.compareRole = function(role,callback){
+//     var query = {username:username};
+//     User.findOne(query,callback);
+// }
+////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getUserById = function(id,callback){
     User.findById(id,callback);
 }

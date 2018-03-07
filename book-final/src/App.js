@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import ViewBooks from './component/viewBook';
+//import ViewBooks from './component/viewBook';
+import ViewMovies from './component/viewMovie';
 import Header from './component/header';
 //import {BrowserRouter} from 'react-router-dom';
 import history from './hist';
@@ -18,8 +19,8 @@ class App extends Component {
      <Router history={history}>
       <div className="App">
       <Header />
-       <Route path="/" exact component={ViewBooks}/>
-       <Route path="/addBook" exact component={AddBook} />
+       <Route path="/" exact component={ViewMovies}/>
+       <Route path="/addBook" exact component={AddMovie} />
        <Route path="/login" exact component={Login}/>
        <Route path="/register" exact component={RegisterForm}/>
        <Route path="/cart" exact component={Cart}/>

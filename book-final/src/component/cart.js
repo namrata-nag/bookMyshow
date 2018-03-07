@@ -23,8 +23,9 @@ class Cart extends Component{
 }
 
 function mapStateToProps(state){
+    
     return {
-        user_new: state.other.success,
+        user_new: state.other.user,
        // user:state.other.admin
 
     }
